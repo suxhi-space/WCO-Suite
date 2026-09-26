@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WCO Suite — Pop-out Player</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
+  #wcp-root { position: fixed; inset: 0; }
+
+  /* Connecting / disconnected states, shown before the real player exists */
+  #wcp-boot {
+    position: fixed; inset: 0; z-index: 15;
+    display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;
+    background: #000; color: #fff; text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    padding-bottom: 90px; /* leaves clear room for the control bar rendered on top */
+  }
+  #wcp-boot.hidden { display: none; }
+  #wcp-boot .spin {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.15); border-top-color: #7b8cde;
+    animation: wcpbootspin 0.8s linear infinite;
+  }
+  @keyframes wcpbootspin { to { transform: rotate(360deg); } }
+  #wcp-boot .msg { font-size: 15px; color: #ccc; }
+  #wcp-boot .sub { font-size: 12px; color: #666; max-width: 340px; }
+
+  /* Sync status badge — small, unobtrusive, bottom-right (clear of the
+     title overlay up top and clear of the control bar it sits just
+     above). Green dot while heartbeats from the source tab are arriving
+     normally; amber + a "resync" affordance once they've gone quiet for
+     too long (almost always because that tab got throttled in the
+     background — nothing is actually broken, it just needs a nudge once
+     it wakes back up).
+     It also fades with the rest of the player controls: buildPlayer()
+     mirrors #wcp's "wcp-ui" class onto this badge as "wcp-uivis" (a
+     MutationObserver, since this element lives outside #wcp-root in the
+     static shell and can't be reached with a CSS sibling selector), so
+     it only shows while the control bar itself is visible. */
+  #wcp-syncbadge {
+    position: fixed; bottom: 78px; right: 16px; z-index: 2147483000;
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(20,20,24,0.7); border-radius: 99px;
+    padding: 5px 10px 5px 8px; font-size: 11px; color: #aaa;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    cursor: default;
+  }
+  #wcp-syncbadge.show.wcp-uivis { opacity: 1; }
+  #wcp-syncbadge.stale.wcp-uivis { pointer-events: auto; cursor: pointer; }
+  #wcp-syncbadge .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #4caf50;
+    transition: background 0.2s;
+  }
+  #wcp-syncbadge.stale .dot { background: #e0a63b; animation: wcpbadgepulse 1.2s ease-in-out infinite; }
+  @keyframes wcpbadgepulse { 50% { opacity: 0.4; } }
+</style>
+</head>
+<body>
+  <div id="wcp-boot">
+    <div class="spin"></div>
+    <div class="msg" id="wcp-boot-msg">Connecting to the original tab…</div>
+    <div class="sub" id="wcp-boot-sub"></div>
+  </div>
+  <div id="wcp-syncbadge"><span class="dot"></span><span id="wcp-syncbadge-text">Synced</span></div>
+  <div id="wcp-root"></div>
+
+<script src="hls.min.js"></script>
+<script src="popout-player.js"></script>
+</body>
+</html>

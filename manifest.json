@@ -1,0 +1,96 @@
+{
+  "manifest_version": 3,
+  "name": "WCO Suite",
+  "version": "1.0.41",
+  "description": "Brings modern stream tools to WCO sites: A custom player, seamless autoplay, popout player and more.",
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://embed.wcostream.com/*",
+    "https://*.wco.tv/*",
+    "https://*.wcostream.tv/*",
+    "https://*.wcoflix.tv/*",
+    "https://*.wcoanimesub.tv/*",
+    "https://*.wcoanimedub.tv/*",
+    "https://*.wcoforever.net/*",
+    "https://*.watchcartoononline.com/*",
+    "https://vhs.wcostream.com/*",
+    "https://*.wcostream.com/*",
+    "https://*.cizgifilmlerizle.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://embed.wcostream.com/*",
+        "https://*.wco.tv/*",
+        "https://*.wcostream.tv/*",
+        "https://*.wcoflix.tv/*",
+        "https://*.wcoanimesub.tv/*",
+        "https://*.wcoanimedub.tv/*",
+        "https://*.wcoforever.net/*",
+        "https://*.watchcartoononline.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "https://vhs.wcostream.com/*"
+      ],
+      "js": [
+        "hls.min.js",
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{d54f3f8d-e4f5-4040-9da2-61ed2474cbbd}",
+      "strict_min_version": "109.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "popout-player.html",
+        "hls.min.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 280px; background: #16171b; color: #d0d2de;
+    font-family: system-ui, -apple-system, sans-serif; font-size: 13px;
+    padding: 16px;
+  }
+  .icon-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .icon-row img { width: 28px; height: 28px; opacity: 0.5; filter: grayscale(1); }
+  .title { font-size: 14px; font-weight: 700; color: #fff; }
+  .msg { font-size: 12.5px; color: #9095b0; line-height: 1.5; margin-bottom: 12px; }
+  .sites { list-style: none; }
+  .sites li {
+    font-size: 12.5px; color: #7b8cde; padding: 5px 0;
+    border-bottom: 1px solid #1e1f24;
+  }
+  .sites li:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+  <div class="icon-row">
+    <img src="icons/icon32.png" alt="">
+    <span class="title">WCO Suite</span>
+  </div>
+  <div class="msg">This extension only works on WCO's official cartoon/anime streaming sites:</div>
+  <ul class="sites" id="site-list"></ul>
+  <script src="unsupported.js"></script>
+</body>
+</html>
